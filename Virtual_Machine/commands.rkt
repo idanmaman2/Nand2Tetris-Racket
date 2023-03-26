@@ -31,7 +31,7 @@ D=M
 A=M-1
 M=D~aM")
 
-(define hack-unari-operator-str 
+(define hack-unary-operator-str 
 "@SP
 A=M-1
 M=~aM
@@ -113,8 +113,8 @@ M=M-1")
 (define (hack-sub) (format hack-binary-operator-str "-"))
 (define (hack-or)  (format hack-binary-operator-str "|"))
 (define (hack-and) (format hack-binary-operator-str "&"))
-(define (hack-neg) (format hack-unari-operator-str "-"))
-(define (hack-not) (format hack-unari-operator-str "!"))
+(define (hack-neg) (format hack-unary-operator-str "-"))
+(define (hack-not) (format hack-unary-operator-str "!"))
 (define (hack-eq)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JEQ"  comp-count comp-count comp-count))
 (define (hack-gt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JGE"  comp-count comp-count comp-count))
 (define (hack-lt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JLT"  comp-count comp-count comp-count))
