@@ -13,9 +13,14 @@
 (provide hack-lt  )
 (provide hack-push)
 (provide hack-pop)
+(provide hack-set-namepsace)
 
 (define comp-count 0)
+(define hack-namespace "")
 
+(define (hack-set-namepsace name)
+    (set! hack-namespace name)
+)
 
 (define hack-binary-operator-str 
 "@SP 
@@ -79,7 +84,12 @@ M=M-1")
         "this"     (lambda (val) (format "@~a\nD=A\n@THIS\nA=M\nA=A+D\nD=M"  val ))
         "that"     (lambda (val) (format "@~a\nD=A\n@THAT\nA=M\nA=A+D\nD=M"  val )) 
         "temp"     (lambda (val) (format "@~a\nD=M"  (+ (string->number val) 5) ) )
-        "constant" (lambda (val) (format "@~a\nD=A" val))))
+        "constant" (lambda (val) (format "@~a\nD=A" val))
+        "static"    (lambda (val) (format "@~a.~a\nD=M" hack-namespace val ))
+        "pointer"   (lambda (val) (format "@~a\nD=M"  (cond [(string=? "0" val) "THIS"] 
+                                                            [(string=? "1" val) "THAT"] 
+                                                            [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
+        ) )
 (format hack-push-str ((hash-ref segments-push segment) arg)))
 
 (define (hack-pop segment arg) 
@@ -90,7 +100,13 @@ M=M-1")
         "local"    (lambda (val) (format "@LCL\nA=M\n~a"  (A-add-command val)))
         "this"     (lambda (val) (format "@THIS\nA=M\n~a"  (A-add-command val)))
         "that"     (lambda (val) (format "@THAT\nA=M\n~a" (A-add-command val)))
-        "temp"     (lambda (val) (format "@~a"  (+ (string->number val ) 5 )))))
+        "temp"     (lambda (val) (format "@~a"  (+ (string->number val ) 5 )))
+        "static"   (lambda (val) (format "@~a.~a" hack-namespace val) ) 
+        "pointer"   (lambda (val) (format "@~a"  (cond [(string=? "0" val) "THIS"] 
+                                                       [(string=? "1" val) "THAT"] 
+                                                       [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
+        
+        ))
 (format hack-pop-str ((hash-ref segments-pop segment) arg)))
 
 (define (hack-add) (format hack-binary-operator-str "+"))

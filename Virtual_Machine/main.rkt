@@ -36,15 +36,20 @@
   (define (looped fileo)
     (let ([line (read-line fileo)])
       (cond
-        [(eof-object? line) ""]
-        [(regexp-match? #rx"^((//| ).*)?$" (string-trim line)) (looped fileo)]
-        [else (string-append (analyze (string-trim line)) "\n" (looped fileo))])))
+        [(eof-object? line) ""] 
+        [(regexp-match? #rx"^((//| ).*)?$" (string-trim line)) (looped fileo)] 
+        [else (string-append (analyze (string-trim line)) "\n" (looped fileo))]))) 
 
   (looped file))
 
 (define inputFileName (vector*-ref (current-command-line-arguments) 0))
 
-(define outputFileName (string-append (car (string-split inputFileName ".")) ".asm"))
+(define namespace (car (string-split inputFileName ".")) )
+
+(define outputFileName (string-append namespace ".asm"))
+
+(hack-set-namepsace namespace)
+
 
 (define outputfile (open-output-file outputFileName #:exists 'replace #:replace-permissions? #t))
 (display (fileAnalyze inputFileName) outputfile)
