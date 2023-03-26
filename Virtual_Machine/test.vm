@@ -1,3 +1,5 @@
-push constant 7
-push constant 8
-add
+eq
+eq
+gt
+lt
+lt

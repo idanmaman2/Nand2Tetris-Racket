@@ -14,6 +14,24 @@
 (provide hack-push)
 (provide hack-pop)
 
+(define comp-count 0)
+
+
+(define hack-binary-operator-str 
+"@SP 
+M=M-1
+A=M 
+D=M    
+@SP  
+A=M-1
+M=D~aM")
+
+(define hack-unari-operator-str 
+"@SP
+A=M-1
+M=~aM
+")
+
 (define hack-push-str 
 "~a
 @SP
@@ -22,7 +40,7 @@ M=D
 @SP
 M=M+1")
 
-(define hack-pop-str
+(define hack-pop-str 
 "@SP
 A=M-1
 D=M
@@ -31,67 +49,20 @@ M=D
 @SP
 M=M-1")
 
-(define hack-add-str 
-"@SP 
-M=M-1
-A=M 
-D=M    
-@SP  
-A=M-1
-M=D+M")
-
-(define hack-sub-str 
-"@SP 
-M=M-1 
-A=M 
-D=M     
-@SP  
-A=M-1
-M=D-M")
-
-(define hack-neg-str 
-"@SP
-A=M-1
-M=-M
-")
-
-(define hack-and-str 
-"@SP 
-M=M-1 
-A=M 
-D=M    
-@SP  
-A=M-1
-M=D&M")
-
-(define hack-or-str 
-"@SP 
-M=M-1 
-A=M 
-D=M    
-@SP  
-A=M-1
-M=D|M")
-
-(define hack-not-str 
-"@SP
-A=M-1
-M=!M")
-
-(define hack-eq-str 
+(define hack-comp-str 
 "@SP
 A=M-1
 D=M
 A=A-1
 D=D-M
-@IF_TRUE0
-D;JEQ
+@IF_TRUE_~a
+D;~a
 D=0
-@IF_FALSE0
+@IF_FALSE_~a
 0;JMP
-(IF_TRUE0) //label 
+(IF_TRUE_~a) 
 D=-1
-(IF_FALSE0)
+(IF_FALSE_~a)
 @SP
 A=M-1
 A=A-1
@@ -99,47 +70,7 @@ M=D
 @SP
 M=M-1")
 
-(define hack-gt-str 
-"@SP
-A=M-1
-D=M
-A=A-1
-D=D-M
-@IF_TRUE0
-D;JGT
-D=0
-@IF_FALSE0
-0;JMP
-(IF_TRUE0) //label 
-D=-1
-(IF_FALSE0)
-@SP
-A=M-1
-A=A-1
-M=D
-@SP
-M=M-1")
 
-(define hack-lt-str 
-"@SP
-A=M-1
-D=M
-A=A-1
-D=D-M
-@IF_TRUE0
-D;JLT
-D=0
-@IF_FALSE0
-0;JMP
-(IF_TRUE0) //label 
-D=-1
-(IF_FALSE0)
-@SP
-A=M-1
-A=A-1
-M=D
-@SP
-M=M-1")
 
 (define (hack-push segment arg) 
 (define segments-push (hash 
@@ -162,15 +93,15 @@ M=M-1")
         "temp"     (lambda (val) (format "@~a"  (+ (string->number val ) 5 )))))
 (format hack-pop-str ((hash-ref segments-pop segment) arg)))
 
-(define (hack-add) hack-add-str)
-(define (hack-sub) hack-sub-str)
-(define (hack-neg) hack-neg-str)
-(define (hack-or)  hack-or-str)
-(define (hack-not) hack-not-str)
-(define (hack-and) hack-and-str)
-(define (hack-eq)  hack-eq-str)
-(define (hack-gt)  hack-gt-str)
-(define (hack-lt)  hack-lt-str)
+(define (hack-add) (format hack-binary-operator-str "+"))
+(define (hack-sub) (format hack-binary-operator-str "-"))
+(define (hack-or)  (format hack-binary-operator-str "|"))
+(define (hack-and) (format hack-binary-operator-str "&"))
+(define (hack-neg) (format hack-unari-operator-str "-"))
+(define (hack-not) (format hack-unari-operator-str "!"))
+(define (hack-eq)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JEQ"  comp-count comp-count comp-count))
+(define (hack-gt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JGE"  comp-count comp-count comp-count))
+(define (hack-lt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JLT"  comp-count comp-count comp-count))
 
 
 
