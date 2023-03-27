@@ -5,28 +5,19 @@
 
 (define (fileAnalyze name)
   (define commands
-    (hash "push"
-          hack-push
-          "pop"
-          hack-pop
-          "add"
-          hack-add
-          "sub"
-          hack-sub
-          "or"
-          hack-or
-          "neg"
-          hack-neg
-          "not"
-          hack-not
-          "and"
-          hack-and
-          "eq"
-          hack-eq
-          "gt"
-          hack-gt
-          "lt"
-          hack-lt))
+    (hash 
+    "push" hack-push
+    "pop" hack-pop
+    "add" hack-add
+    "sub" hack-sub
+    "or"  hack-or
+    "neg" hack-neg
+    "not" hack-not 
+    "and" hack-and
+    "eq"  hack-eq
+    "gt"  hack-gt
+    "lt"  hack-lt))
+
   (define file (open-input-file name))
   (define (analyze fileLine)
     (let* ([splitted (string-split fileLine " ")] [command (car splitted)])
@@ -43,11 +34,8 @@
   (looped file))
 
 (define inputFileName (vector*-ref (current-command-line-arguments) 0))
-
 (define namespace (car (string-split inputFileName ".")) )
-
 (define outputFileName (string-append namespace ".asm"))
-
 (hack-set-namepsace namespace)
 
 
