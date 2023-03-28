@@ -29,7 +29,7 @@ A=M
 D=M    
 @SP  
 A=M-1
-M=D~aM")
+M=M~aD")
 
 (define hack-unary-operator-str 
 "@SP
@@ -60,14 +60,14 @@ A=M-1
 D=M
 A=A-1
 D=D-M
-@IF_TRUE_~a
+@IF_TRUE~a
 D;~a
 D=0
-@IF_FALSE_~a
+@IF_FALSE~a
 0;JMP
-(IF_TRUE_~a) 
+(IF_TRUE~a) 
 D=-1
-(IF_FALSE_~a)
+(IF_FALSE~a)
 @SP
 A=M-1
 A=A-1
@@ -116,8 +116,8 @@ M=M-1")
 (define (hack-neg) (format hack-unary-operator-str "-"))
 (define (hack-not) (format hack-unary-operator-str "!"))
 (define (hack-eq)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JEQ"  comp-count comp-count comp-count))
-(define (hack-gt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JGE"  comp-count comp-count comp-count))
-(define (hack-lt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JLT"  comp-count comp-count comp-count))
+(define (hack-gt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JLT"  comp-count comp-count comp-count))
+(define (hack-lt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JGT"  comp-count comp-count comp-count))
 
 
 

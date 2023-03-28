@@ -7,21 +7,20 @@
   (define commands
     (hash 
     "push" hack-push
-    "pop" hack-pop
-    "add" hack-add
-    "sub" hack-sub
-    "or"  hack-or
-    "neg" hack-neg
-    "not" hack-not 
-    "and" hack-and
-    "eq"  hack-eq
-    "gt"  hack-gt
-    "lt"  hack-lt))
+    "pop"  hack-pop
+    "add"  hack-add
+    "sub"  hack-sub
+    "or"   hack-or
+    "neg"  hack-neg
+    "not"  hack-not 
+    "and"  hack-and
+    "eq"   hack-eq
+    "gt"   hack-gt
+    "lt"   hack-lt))
 
   (define file (open-input-file name))
   (define (analyze fileLine)
     (let* ([splitted (string-split fileLine " ")] [command (car splitted)])
-      (display (take-right splitted (- (length splitted) 1)))
       (apply (hash-ref commands command) (take-right splitted (- (length splitted) 1)))))
 
   (define (looped fileo)
