@@ -3,7 +3,7 @@
 (require racket/list)
 (require "commands.rkt")
 
-(define (fileAnalyze name)
+(define (fileAnalyze inputName outputName)
   (define commands
     (hash 
     "push" hack-push
@@ -18,7 +18,8 @@
     "gt"   hack-gt
     "lt"   hack-lt))
 
-  (define file (open-input-file name))
+  (define inputFile (open-input-file inputName))
+  (define outputFile (open-output-file outputName #:exists 'replace #:replace-permissions? #t))
   (define (analyze fileLine)
     (let* ([splitted (string-split fileLine " ")] [command (car splitted)])
       (apply (hash-ref commands command) (take-right splitted (- (length splitted) 1)))))
@@ -26,17 +27,18 @@
   (define (looped fileo)
     (let ([line (read-line fileo)])
       (cond
-        [(eof-object? line) ""] 
+        [(eof-object? line)  (void) ] 
         [(regexp-match? #rx"^((//| ).*)?$" (string-trim line)) (looped fileo)] 
-        [else (string-append (analyze (string-trim line)) "\n" (looped fileo))]))) 
+        [else 
+        (display (analyze (string-trim line)) outputFile)   
+          (looped fileo)
+        
+        ]))) 
 
-  (looped file))
+  (looped inputFile))
 
 (define inputFileName (vector*-ref (current-command-line-arguments) 0))
 (define namespace (car (string-split inputFileName ".")) )
 (define outputFileName (string-append namespace ".asm"))
 (hack-set-namepsace namespace)
-
-
-(define outputfile (open-output-file outputFileName #:exists 'replace #:replace-permissions? #t))
-(display (fileAnalyze inputFileName) outputfile)
+(fileAnalyze inputFileName outputFileName)
