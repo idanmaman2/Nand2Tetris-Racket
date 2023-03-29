@@ -1,7 +1,9 @@
+;importing
 #lang racket/base
 (require racket/string)
 (require racket/list)
 
+;exporting 
 (provide hack-add)
 (provide hack-sub )
 (provide hack-neg )
@@ -13,111 +15,105 @@
 (provide hack-lt  )
 (provide hack-push)
 (provide hack-pop)
+(provide hack-label)
+(provide hack-goto)
+(provide hack-if-goto)
+(provide hack-function)
+(provide hack-call)
+(provide hack-return)
 (provide hack-set-namepsace)
 
+;global vars 
 (define comp-count 0)
 (define hack-namespace "")
 
+;functions and help global vars
 (define (hack-set-namepsace name)
     (set! hack-namespace name)
 )
 
-(define hack-binary-operator-str 
-"@SP 
-M=M-1
-A=M 
-D=M    
-@SP  
-A=M-1
-M=M~aD")
-
-(define hack-unary-operator-str 
-"@SP
-A=M-1
-M=~aM
-")
-
-(define hack-push-str 
-"~a
-@SP
-A=M
-M=D
-@SP
-M=M+1")
-
-(define hack-pop-str 
-"@SP
-A=M-1
-D=M
-~a
-M=D
-@SP
-M=M-1")
-
-(define hack-comp-str 
-"@SP
-A=M-1
-D=M
-A=A-1
-D=D-M
-@IF_TRUE~a
-D;~a
-D=0
-@IF_FALSE~a
-0;JMP
-(IF_TRUE~a) 
-D=-1
-(IF_FALSE~a)
-@SP
-A=M-1
-A=A-1
-M=D
-@SP
-M=M-1")
-
-
-
-(define (hack-push segment arg) 
-(define segments-push (hash 
-        "argument" (lambda (val) (format "@~a\nD=A\n@ARG\nA=M\nA=A+D\nD=M"  val ))
-        "local"    (lambda (val) (format "@~a\nD=A\n@LCL\nA=M\nA=A+D\nD=M"  val ))
-        "this"     (lambda (val) (format "@~a\nD=A\n@THIS\nA=M\nA=A+D\nD=M"  val ))
-        "that"     (lambda (val) (format "@~a\nD=A\n@THAT\nA=M\nA=A+D\nD=M"  val )) 
-        "temp"     (lambda (val) (format "@~a\nD=M"  (+ (string->number val) 5) ) )
-        "constant" (lambda (val) (format "@~a\nD=A" val))
-        "static"    (lambda (val) (format "@~a.~a\nD=M" hack-namespace val ))
-        "pointer"   (lambda (val) (format "@~a\nD=M"  (cond [(string=? "0" val) "THIS"] 
-                                                            [(string=? "1" val) "THAT"] 
-                                                            [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
-        ) )
-(format hack-push-str ((hash-ref segments-push segment) arg)))
-
-(define (hack-pop segment arg) 
-(define (A-add-command val )
-(string-join (map (lambda (ex) "A=A+1") (range (string->number val)) ) "\n"))
-(define segments-pop (hash 
-        "argument" (lambda (val) (format "@ARG\nA=M\n~a" (A-add-command val)))
-        "local"    (lambda (val) (format "@LCL\nA=M\n~a"  (A-add-command val)))
-        "this"     (lambda (val) (format "@THIS\nA=M\n~a"  (A-add-command val)))
-        "that"     (lambda (val) (format "@THAT\nA=M\n~a" (A-add-command val)))
-        "temp"     (lambda (val) (format "@~a"  (+ (string->number val ) 5 )))
-        "static"   (lambda (val) (format "@~a.~a" hack-namespace val) ) 
-        "pointer"   (lambda (val) (format "@~a"  (cond [(string=? "0" val) "THIS"] 
-                                                       [(string=? "1" val) "THAT"] 
-                                                       [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
-        
-        ))
-(format hack-pop-str ((hash-ref segments-pop segment) arg)))
-
+;"Preform binary operator action - hack-binary-operator-str is a generic function"
+(define hack-binary-operator-str (string-join (list "@SP" "M=M-1" "A=M" "D=M" "@SP" "A=M-1""M=M~aD") "\n"))
 (define (hack-add) (format hack-binary-operator-str "+"))
 (define (hack-sub) (format hack-binary-operator-str "-"))
 (define (hack-or)  (format hack-binary-operator-str "|"))
 (define (hack-and) (format hack-binary-operator-str "&"))
+
+;"Preform unary operator action - hack-unary-operator-str is a generic function"
+(define hack-unary-operator-str (string-join (list "@SP" "A=M-1""M=~aM") "\n"))
 (define (hack-neg) (format hack-unary-operator-str "-"))
 (define (hack-not) (format hack-unary-operator-str "!"))
+
+;"hack-push-str get in D the value to push and pushes it , hack-push enter code that loads value to D by segment"
+(define hack-push-str (string-join (list "~a" "@SP" "A=M" "M=D" "@SP" "M=M+1" ) "\n"))
+(define (hack-push segment arg) 
+(define segments-push (hash 
+        "argument" (lambda (val) (format (string-join (list "@~a" "D=A" "@ARG" "A=M" "A=A+D" "D=M" ) "\n")  val ))
+        "local"    (lambda (val) (format (string-join (list "@~a" "D=A" "@LCL" "A=M" "A=A+D" "D=M" ) "\n")  val ))
+        "this"     (lambda (val) (format (string-join (list "@~a" "D=A" "@THIS" "A=M" "A=A+D" "D=M") "\n")  val ))
+        "that"     (lambda (val) (format (string-join (list "@~a" "D=A" "@THAT" "A=M" "A=A+D" "D=M") "\n")  val )) 
+        "temp"     (lambda (val) (format (string-join (list "@~a" "D=M"                            ) "\n")  (+ (string->number val) 5) ) )
+        "constant" (lambda (val) (format (string-join (list "@~a" "D=A"                            ) "\n") val))
+        "static"    (lambda (val) (format (string-join (list "@~a.~a" "D=M"                        ) "\n") hack-namespace val ))
+        "pointer"   (lambda (val) (format (string-join (list "@~a" "D=M"                           ) "\n")  (cond [(string=? "0" val) "THIS"] 
+                                                                                                                  [(string=? "1" val) "THAT"] 
+                                                                                                                  [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
+        ) )
+(format hack-push-str ((hash-ref segments-push segment) arg)))
+
+;"hack-pop-str get in A the address to pop the head of the stack into , hack-pop enter code that loads address to A by segment"
+(define hack-pop-str (string-join (list "@SP" "A=M-1" "D=M" "~a" "M=D" "@SP" "M=M-1") "\n"))
+(define (hack-pop segment arg) 
+(define (A-add-command val )
+(string-join (map (lambda (ex) "A=A+1") (range (string->number val)) ) "\n"))
+(define segments-pop (hash 
+        "argument" (lambda (val) (format (string-join (list "@ARG" "A=M" "~a") "\n") (A-add-command val)))
+        "local"    (lambda (val) (format (string-join (list "@LCL" "A=M" "~a") "\n")  (A-add-command val)))
+        "this"     (lambda (val) (format (string-join (list "@THIS" "A=M" "~a") "\n" )  (A-add-command val)))
+        "that"     (lambda (val) (format (string-join (list "@THAT" "A=M" "~a") "\n") (A-add-command val)))
+        "temp"     (lambda (val) (format                      "@~a"  (+ (string->number val ) 5 )))
+        "static"   (lambda (val) (format                      "@~a.~a" hack-namespace val) ) 
+        "pointer"   (lambda (val) (format                     "@~a"  (cond [(string=? "0" val) "THIS"] 
+                                                                           [(string=? "1" val) "THAT"] 
+                                                                           [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
+        
+        ))
+        (format hack-pop-str ((hash-ref segments-pop segment) arg)))
+
+;"Compare between 2 values - hack-comp is a generic function"
+(define hack-comp-str (string-join (list "@SP" "A=M-1" "D=M" "A=A-1" "D=D-M" "@IF_TRUE~a" "D;~a" "D=0" "@IF_FALSE~a" "0;JMP" "(IF_TRUE~a)" "D=-1" "(IF_FALSE~a)" "@SP" "A=M-1" "A=A-1" "M=D" "@SP" "M=M-1") "\n"))
 (define (hack-eq)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JEQ"  comp-count comp-count comp-count))
 (define (hack-gt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JLT"  comp-count comp-count comp-count))
 (define (hack-lt)  (set! comp-count (+ comp-count 1))(format hack-comp-str comp-count "JGT"  comp-count comp-count comp-count))
 
+;"preform goto"
+(define hack-goto-str (string-join (list "@LABEL_~a" "0;JMP") "\n"))
+(define (hack-goto labelName) (format hack-goto-str labelName))
 
+;"creates label"
+(define hack-label-str "(LABEL_~a)")
+(define (hack-label labelName) (format hack-label-str labelName))
 
+;"preforms goto if the last value in stack is not 0-false"
+(define hack-if-goto-str (string-join (list "@SP" "M=M-1" "A=M" "D=M" "@IF_FALSEGOTO~a" "D;JEQ" "@LABEL_~a" "0;JMP" "(IF_FALSEGOTO~a)" ) "\n"))
+(define (hack-if-goto labelName) (set! comp-count (+ comp-count 1)) (format hack-if-goto-str comp-count labelName comp-count))
+
+;"preform a call to function"
+(define hack-call-str (string-join (list "~a" "~a" "~a" "~a" "~a" "@~a" "D=A" "@SP" "D=M-D" "@ARG" "M=D" "@SP" "D=M" "@LCL" "M=D" "~a" "~a") "\n" ))
+(define (hack-call funcName nArgs) (format hack-call-str
+                                        (hack-push "constant" (format "RETURN_~a" funcName))
+                                        (format hack-push-str "@LCL\nD=M")
+                                        (format hack-push-str "@ARG\nD=M")
+                                        (format hack-push-str "@THIS\nD=M")
+                                        (format hack-push-str "@THAT\nD=M")
+                                        (number->string (- (string->number nArgs) 5 ))
+                                        (hack-goto (format "FUNCTION_~a" funcName ))
+                                        (hack-label (format "RETURN_~a" funcName ))))
+
+;"create function"
+(define hack-function-str "(FUNCTION_~a)") 
+(define (hack-function funcName nArgs) (format hack-function-str funcName) )
+
+;"return from function"
+(define hack-return-str (string-join (list "~a" "@ARG" "D=M" "@SP" "M=D+1" "@LCL" "D=M" "@THAT" "D=D-1" "M=D" "@THIS" "D=D-1" "M=D" "@ARG" "D=D-1" "M=D" "@LCL" "D=D-1" "M=D" "@SP" "A=M+1" "A=M" "0;JMP") "\n"))
+(define (hack-return) (format (hack-pop "argument" "0")))

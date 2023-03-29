@@ -6,17 +6,23 @@
 (define (fileAnalyze inputName outputName)
   (define commands
     (hash 
-    "push" hack-push
-    "pop"  hack-pop
-    "add"  hack-add
-    "sub"  hack-sub
-    "or"   hack-or
-    "neg"  hack-neg
-    "not"  hack-not 
-    "and"  hack-and
-    "eq"   hack-eq
-    "gt"   hack-gt
-    "lt"   hack-lt))
+    "push"     hack-push
+    "pop"      hack-pop
+    "add"      hack-add
+    "sub"      hack-sub
+    "or"       hack-or
+    "neg"      hack-neg
+    "not"      hack-not 
+    "and"      hack-and
+    "eq"       hack-eq
+    "gt"       hack-gt
+    "lt"       hack-lt
+    "label"    hack-label
+    "goto"     hack-goto
+    "if-goto"  hack-if-goto 
+    "function" hack-function
+    "call"     hack-call
+    "return"   hack-return ))
 
   (define inputFile (open-input-file inputName))
   (define outputFile (open-output-file outputName #:exists 'replace #:replace-permissions? #t))
