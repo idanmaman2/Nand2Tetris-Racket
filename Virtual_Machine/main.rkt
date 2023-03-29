@@ -30,7 +30,8 @@
         [(eof-object? line)  (void) ] 
         [(regexp-match? #rx"^((//| ).*)?$" (string-trim line)) (looped fileo)] 
         [else 
-        (display (analyze (string-trim line)) outputFile)   
+        (display (analyze (string-trim line)) outputFile)  
+        (display "\n" outputFile )  
           (looped fileo)
         
         ]))) 
