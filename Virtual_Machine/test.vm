@@ -1,6 +1,1 @@
-push constant 10 
-push constant 10 
-label loop
-    add 
-    push constant 10 
-goto loop
+return

@@ -48,14 +48,14 @@
 (define hack-push-str (string-join (list "~a" "@SP" "A=M" "M=D" "@SP" "M=M+1" ) "\n"))
 (define (hack-push segment arg) 
 (define segments-push (hash 
-        "argument" (lambda (val) (format (string-join (list "@~a" "D=A" "@ARG" "A=M" "A=A+D" "D=M" ) "\n")  val ))
-        "local"    (lambda (val) (format (string-join (list "@~a" "D=A" "@LCL" "A=M" "A=A+D" "D=M" ) "\n")  val ))
-        "this"     (lambda (val) (format (string-join (list "@~a" "D=A" "@THIS" "A=M" "A=A+D" "D=M") "\n")  val ))
-        "that"     (lambda (val) (format (string-join (list "@~a" "D=A" "@THAT" "A=M" "A=A+D" "D=M") "\n")  val )) 
-        "temp"     (lambda (val) (format (string-join (list "@~a" "D=M"                            ) "\n")  (+ (string->number val) 5) ) )
-        "constant" (lambda (val) (format (string-join (list "@~a" "D=A"                            ) "\n") val))
-        "static"    (lambda (val) (format (string-join (list "@~a.~a" "D=M"                        ) "\n") hack-namespace val ))
-        "pointer"   (lambda (val) (format (string-join (list "@~a" "D=M"                           ) "\n")  (cond [(string=? "0" val) "THIS"] 
+        "argument"  (lambda (val) (format (string-join  (list "@~a" "D=A" "@ARG" "A=M" "A=A+D" "D=M" ) "\n")  val ))
+        "local"     (lambda (val) (format (string-join  (list "@~a" "D=A" "@LCL" "A=M" "A=A+D" "D=M" ) "\n")  val ))
+        "this"      (lambda (val) (format (string-join  (list "@~a" "D=A" "@THIS" "A=M" "A=A+D" "D=M") "\n")  val ))
+        "that"      (lambda (val) (format (string-join  (list "@~a" "D=A" "@THAT" "A=M" "A=A+D" "D=M") "\n")  val )) 
+        "temp"      (lambda (val) (format (string-join  (list "@~a" "D=M"                            ) "\n")  (+ (string->number val) 5) ) )
+        "constant"  (lambda (val) (format (string-join  (list "@~a" "D=A"                            ) "\n") val))
+        "static"    (lambda (val) (format (string-join  (list "@~a.~a" "D=M"                         ) "\n") hack-namespace val ))
+        "pointer"   (lambda (val) (format (string-join  (list "@~a" "D=M"                            ) "\n")  (cond [(string=? "0" val) "THIS"] 
                                                                                                                   [(string=? "1" val) "THAT"] 
                                                                                                                   [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
         ) )
@@ -67,15 +67,15 @@
 (define (A-add-command val )
 (string-join (map (lambda (ex) "A=A+1") (range (string->number val)) ) "\n"))
 (define segments-pop (hash 
-        "argument" (lambda (val) (format (string-join (list "@ARG" "A=M" "~a") "\n") (A-add-command val)))
-        "local"    (lambda (val) (format (string-join (list "@LCL" "A=M" "~a") "\n")  (A-add-command val)))
-        "this"     (lambda (val) (format (string-join (list "@THIS" "A=M" "~a") "\n" )  (A-add-command val)))
-        "that"     (lambda (val) (format (string-join (list "@THAT" "A=M" "~a") "\n") (A-add-command val)))
-        "temp"     (lambda (val) (format                      "@~a"  (+ (string->number val ) 5 )))
-        "static"   (lambda (val) (format                      "@~a.~a" hack-namespace val) ) 
-        "pointer"   (lambda (val) (format                     "@~a"  (cond [(string=? "0" val) "THIS"] 
-                                                                           [(string=? "1" val) "THAT"] 
-                                                                           [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
+        "argument" (lambda (val)  (string-trim (format (string-join (list "@ARG" "A=M" "~a") "\n") (A-add-command val))))
+        "local"    (lambda (val)  (string-trim (format (string-join (list "@LCL" "A=M" "~a") "\n")  (A-add-command val))))
+        "this"     (lambda (val)  (string-trim (format (string-join (list "@THIS" "A=M" "~a") "\n" )  (A-add-command val))))
+        "that"     (lambda (val)  (string-trim (format (string-join (list "@THAT" "A=M" "~a") "\n") (A-add-command val))))
+        "temp"     (lambda (val)  (format                                 "@~a"  (+ (string->number val ) 5 )))
+        "static"   (lambda (val)  (format                                 "@~a.~a" hack-namespace val) ) 
+        "pointer"   (lambda (val) (format                                  "@~a"  (cond [(string=? "0" val) "THIS"] 
+                                                                                        [(string=? "1" val) "THAT"] 
+                                                                                        [else (error 'method-a "failed because ~a" "pointer pop value is not valid")])))
         
         ))
         (format hack-pop-str ((hash-ref segments-pop segment) arg)))
@@ -95,7 +95,7 @@
 (define (hack-label labelName) (format hack-label-str labelName))
 
 ;"preforms goto if the last value in stack is not 0-false"
-(define hack-if-goto-str (string-join (list "@SP" "M=M-1" "A=M" "D=M" "@IF_FALSEGOTO~a" "D;JEQ" "@LABEL_~a" "0;JMP" "(IF_FALSEGOTO~a)" ) "\n"))
+(define hack-if-goto-str (string-join (list "@SP" "M=M-1" "A=M" "D=M" "D;JNE" ) "\n"))
 (define (hack-if-goto labelName) (set! comp-count (+ comp-count 1)) (format hack-if-goto-str comp-count labelName comp-count))
 
 ;"preform a call to function"
@@ -111,9 +111,29 @@
                                         (hack-label (format "RETURN_~a" funcName ))))
 
 ;"create function"
-(define hack-function-str "(FUNCTION_~a)") 
-(define (hack-function funcName nArgs) (format hack-function-str funcName) )
+(define hack-function-str (string-join (list "(FUNCTION_~a)" "~a") "\n" ) )
+(define (hack-function funcName nArgs) (format hack-function-str 
+        funcName 
+        (string-join (map (lambda (ex) (hack-push "constant" "0")) (range (string->number nArgs)) ) "\n")
+        
+)) 
 
 ;"return from function"
-(define hack-return-str (string-join (list "~a" "@ARG" "D=M" "@SP" "M=D+1" "@LCL" "D=M" "@THAT" "D=D-1" "M=D" "@THIS" "D=D-1" "M=D" "@ARG" "D=D-1" "M=D" "@LCL" "D=D-1" "M=D" "@SP" "A=M+1" "A=M" "0;JMP") "\n"))
-(define (hack-return) (format (hack-pop "argument" "0")))
+
+
+(define hack-return-str
+
+(string-join (list "@LCL" "D=M" "@5" "A=D-A" "D=M" "@13" "M=D" "~a" "@ARG" "D=M" "@SP" "M=D+1" "~a" "~a" "~a" "~a" "@13" "A=M" "0;JMP" ) "\n") 
+
+)
+
+(define (hack-return) 
+
+(define (mini_recovery_segment segment) (string-join (list "@LCL" "M=M-1" "A=M" "D=M" (format "@~a" segment) "M=D") "\n"))
+(format hack-return-str 
+(hack-pop "argument" "0")
+(mini_recovery_segment "THAT") 
+(mini_recovery_segment "THIS") 
+(mini_recovery_segment "ARG") 
+(mini_recovery_segment "LCL")
+))
