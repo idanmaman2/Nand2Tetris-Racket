@@ -131,9 +131,9 @@
 
 (define (mini_recovery_segment segment) (string-join (list "@LCL" "M=M-1" "A=M" "D=M" (format "@~a" segment) "M=D") "\n"))
 (format hack-return-str 
-(hack-pop "argument" "0")
-(mini_recovery_segment "THAT") 
-(mini_recovery_segment "THIS") 
-(mini_recovery_segment "ARG") 
-(mini_recovery_segment "LCL")
+        (hack-pop "argument" "0")
+        (mini_recovery_segment "THAT") 
+        (mini_recovery_segment "THIS") 
+        (mini_recovery_segment "ARG") 
+        (mini_recovery_segment "LCL")
 ))
