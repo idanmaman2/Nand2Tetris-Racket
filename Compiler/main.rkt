@@ -7,7 +7,7 @@
 (require "lexer.rkt")
 ;Idan's Nand2Tetris Comiler under the MIT License
 
-(define test "if(x<153){let city=\"Paris\";}")
+(define test "if(x<153){let city=\"Paris\";}\n//cool world!!!\n/*idan maman leaves on the top of ***the\nworldm***bro\n*idan maman*\\")
 (define ftest (open-input-string test))
 (define tokens-list (fileAnlyze ftest) )
 

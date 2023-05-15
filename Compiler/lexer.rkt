@@ -142,6 +142,40 @@
 
    [#\space (void)]
    [#\newline  (void)]
+   ; comment type 1 //
+   [(or
+   (:
+        #\/
+        #\/
+        (repetition  
+                0
+                +inf.0
+                (or
+                    lower-case
+                    upper-case                    
+                    graphic
+                    punctuation
+                    alphabetic
+                    #\space 
+                )
+        ) 
+
+        #\newline 
+   ) )
+   (void)
+   ]
+   ;comment type 2 \**\
+   [
+        (: 
+            #\/
+            #\* 
+            any-string 
+            #\*
+            #\\
+
+        )
+    (void)
+   ]
    [(eof)  eof]
 
    ))
