@@ -115,7 +115,7 @@
         ;string tokens rule 
         [
             (: #\" any-string  #\") 
-            (begin (token-STRING lexeme ))
+            (begin (token-STRING (substring lexeme 1 (sub1 (string-length lexeme)) )))
         ]
 
         ;id tokens rule 
