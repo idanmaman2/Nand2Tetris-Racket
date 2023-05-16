@@ -114,7 +114,17 @@
 
         ;string tokens rule 
         [
-            (: #\" any-string  #\") 
+            (: 
+            #\" 
+
+            (repetition  
+                0
+                +inf.0
+                (~ 
+                    #\"
+                ) 
+            )    
+            #\") 
             (begin (token-STRING (substring lexeme 1 (sub1 (string-length lexeme)) )))
         ]
 
@@ -140,42 +150,35 @@
         ]
 
 
-   [#\space (void)]
-   [#\newline  (void)]
    ; comment type 1 //
-   [(or
-   (:
-        #\/
-        #\/
+   [(:
+        "//"
         (repetition  
                 0
                 +inf.0
-                (or
-                    lower-case
-                    upper-case                    
-                    graphic
-                    punctuation
-                    alphabetic
-                    #\space 
-                )
+           (~ 
+            #\newline 
+           ) 
         ) 
-
         #\newline 
-   ) )
+   )
    (void)
    ]
    ;comment type 2 \**\
    [
         (: 
-            #\/
-            #\* 
+            "/*"
             any-string 
-            #\*
-            #\\
+            "*/"
 
         )
     (void)
    ]
+
+   [#\space (void)]
+   [#\newline  (void)]
+   [whitespace (void)]
+   [blank (void)]
    [(eof)  eof]
 
    ))
@@ -186,7 +189,7 @@
     (define (anlyzeRec) 
         (let (
         [line (Nand2TetrisLexer ftest) ])   
-        
+        (writeln line  )
         (cond 
             [(eof-object? line ) (void)]
             [(void? line ) (anlyzeRec)]

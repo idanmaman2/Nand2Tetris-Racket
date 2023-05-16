@@ -1,0 +1,5 @@
+./testJack/*
+./testJack/
+**.xml 
+**.jack
+**.vm
