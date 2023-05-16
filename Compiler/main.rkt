@@ -7,7 +7,6 @@
 (require "lexer.rkt")
 ;Idan's Nand2Tetris Compiler under the MIT License
 
-
 ;cause they are suck in choosing names I translated it with hashmap to their name it the last minute - Nand2Tetris names are suck...
 (define suckNames 
         (hash
@@ -20,19 +19,12 @@
 )
 
 
-
-
-
-(define test "if(x<153){let city=\"Paris\";}\n//cool world!!!\n/*idan maman leaves on the top of ***the\nworldm***bro\n*idan maman*\\")
-(define ftest (open-input-string test))
-
-
 ;anlyze single file 
 (define argFolder (vector*-ref (current-command-line-arguments) 0))
 
 (define (fileAnalyze path name)
 (let* (
-        [fileName  (string-append name "T.xml")]
+        [fileName  (string-append (string-trim name ".jack" #:left? #f #:right? #t #:repeat? #f) "IT.xml")]
         [outputfile (open-output-file (string-append argFolder "/" fileName)
                         #:exists 'replace
                         #:replace-permissions? #t)]
