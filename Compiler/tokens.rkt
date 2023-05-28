@@ -10,8 +10,12 @@
 (provide    token-INTEGER)
 (provide    token-STRING)
 (provide    token-ID)
-
-
+; groups 
+(provide    ID-tokens)
+(provide    STR-tokens)
+(provide    INT-tokens)
+(provide    symbol-tokens   )
+(provide    keywords-tokens  )
 ;tokens 
 
 
@@ -23,3 +27,9 @@
 (define-tokens      STR-tokens           (STRING)    )
 (define-tokens      ID-tokens            (ID)        )
 
+
+
+
+
+
+  

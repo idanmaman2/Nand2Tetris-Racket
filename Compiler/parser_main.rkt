@@ -2,7 +2,7 @@
 (require racket/string)
 (require racket/list)
 (require xml)
-(require parser-tools/lex)
+(require parser-tools/yacc)	
 (require "tokens.rkt")
 ;Idan's Nand2Tetris Compiler under the MIT License
 ;that program gets dump of tokens and do syntax parsing on them and dump that into xml file ends with .xml
