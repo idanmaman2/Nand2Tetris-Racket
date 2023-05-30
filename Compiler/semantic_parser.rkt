@@ -122,7 +122,7 @@
    (start <class>)
    (end EOF)
    (error (lambda (a b stx) 
-              (error 'parse "@@@ JACK COMPAILER @@@  failed at:\n\ttoken_nickname : `~a`\n\ttoken_symbol:  `~a`"  b stx)))
+              (error 'parse "@@@ JACK COMPILER @@@  failed at:\n\ttoken_nickname : `~a`\n\ttoken_symbol:  `~a`"  b stx)))
    (grammar
     ;###################### grammer rules #####################
     ; ----------------------------------------------------------------
