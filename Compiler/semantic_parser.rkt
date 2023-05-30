@@ -9,7 +9,7 @@
 
 ;exports 
 (provide type2TokensConvertor)
-(provide XMLjackParserPrivate)
+(provide XMLjackParser)
 
 
 ;Idan's Nand2Tetris Compiler under the MIT License
@@ -116,7 +116,7 @@
 (map token-convert tokenList)
 )
 
-(define XMLjackParserPrivate
+(define XMLjackParser
   (cfg-parser
    (tokens keywords-tokens stopTokens keywords-tokensC symbol-tokensC INT-tokens STR-tokens ID-tokens)
    (start <class>)

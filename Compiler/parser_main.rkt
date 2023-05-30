@@ -32,8 +32,6 @@
          )  
     (filter token? (map (lambda (x) (let 
              ([root (syntax->datum x)]
-              ;[a (first root ) ]
-              ;[b (list-ref root 2)]
              )
              (cond 
                  [(list? root) 
@@ -85,7 +83,7 @@
         [output-file (open-output-file (string-append argFolder "/" fileName)
                                        #:exists 'replace
                                        #:replace-permissions? #t)]
-       [parser-output (XMLjackParserPrivate get-tokens)]
+       [parser-output (XMLjackParser get-tokens)]
     
     )
     (dumpToScreen name better-tokens)
