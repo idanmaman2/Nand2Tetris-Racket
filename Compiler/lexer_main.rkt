@@ -29,11 +29,11 @@
          [tokens-list (fileAnlyze file)])
     (for ([i tokens-list])
       (set! tokens (append tokens (list (list (hash-ref suckNames (token-name i)) (token-value i))))))
-    for ([i tokens-list])
+    (for ([i tokens-list])
       (writeln i))
     (writeln tokens)
-    (write-xexpr tokens outputfile)))
-
+    (write-xexpr tokens outputfile))
+)
 ;loop over the files in the directory
 (for ([i (map path->string (directory-list argFolder))] #:when (string-suffix? i ".jack"))
 
