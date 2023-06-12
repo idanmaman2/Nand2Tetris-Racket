@@ -149,7 +149,7 @@
     ;parameterList -> ( (type varName) (','  type VarName)* )?
     [<parameterList>
      [() (list 'parameterList)]
-     [(<type> <varName> <ITERParamterList>) (append (list 'parameterList $1 $2) $3)]]
+     [(<type> <varName> <ITERParamterList>) (writeln (format "~a ~a ~a" $1 $2 $3)) (append (list 'parameterList $1 $2) $3)]]
     ;subroutineBody -> '{' varDec* statements '}'
     [<subroutineBody>
      [(<JSYM-LCURLY-XML> <ITERVarDec> <statements> <JSYM-RCURLY-XML>)

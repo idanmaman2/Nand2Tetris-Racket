@@ -76,7 +76,9 @@
         [tokens (anlyzeXmlTokens argFolder name) ]
         [better-tokens (append (type2TokensConvertor tokens) (list (token-EOF 'eof)))]
         [current-token -1 ]
-        [get-tokens (lambda () (set! current-token (add1 current-token) ) (writeln current-token) (list-ref better-tokens current-token))]
+        [get-tokens (lambda () (set! current-token (add1 current-token) ) 
+        ;(writeln current-token) 
+        (list-ref better-tokens current-token))]
         
         [fileName (string-append (string-trim name "IT.xml" #:left? #f #:right? #t #:repeat? #f)
                                   "IX.xml")]
@@ -86,8 +88,8 @@
        [parser-output (XMLjackParser get-tokens)]
     
     )
-    (dumpToScreen name better-tokens)
-    (display parser-output)
+    ;(dumpToScreen name better-tokens)
+    ;(display parser-output)
     (write-xexpr parser-output output-file)
 
 
