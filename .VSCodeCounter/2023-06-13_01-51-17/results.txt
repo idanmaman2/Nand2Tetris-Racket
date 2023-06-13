@@ -1,0 +1,66 @@
+Date : 2023-06-13 01:51:17
+Directory : /Users/idang/dev2/Nand2Tetris-Racket
+Total : 31 files,  5264 codes, 143 comments, 222 blanks, all 5629 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| XML      |         14 |      4,086 |          0 |          6 |      4,092 |
+| Racket   |         11 |        865 |        127 |        157 |      1,149 |
+| Markdown |          3 |        168 |          0 |         29 |        197 |
+| Jack     |          3 |        145 |         16 |         30 |        191 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                  | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                     |         31 |      5,264 |        143 |        222 |      5,629 |
+| . (Files)                                                             |          1 |          4 |          0 |          3 |          7 |
+| Compiler                                                              |          9 |        718 |        112 |        127 |        957 |
+| Compiler (Files)                                                      |          7 |        625 |        104 |        103 |        832 |
+| Compiler/testing                                                      |          2 |         93 |          8 |         24 |        125 |
+| IDK                                                                   |         17 |      4,231 |         16 |         36 |      4,283 |
+| Virtual_Machine                                                       |          4 |        311 |         15 |         56 |        382 |
+| Virtual_Machine (Files)                                               |          2 |        147 |         15 |         30 |        192 |
+| Virtual_Machine/md                                                    |          2 |        164 |          0 |         26 |        190 |
++-----------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                              | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/code_writer.rkt         | Racket   |         21 |          2 |          4 |         27 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/lexer.rkt               | Racket   |         57 |         21 |          4 |         82 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/lexer_main.rkt          | Racket   |         32 |          5 |          3 |         40 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/parser_main.rkt         | Racket   |         64 |         12 |         27 |        103 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/semantic_parser.rkt     | Racket   |        351 |         47 |         23 |        421 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/symbol_table.rkt        | Racket   |         80 |         11 |         30 |        121 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/testing/test_parser.rkt | Racket   |         40 |          1 |         10 |         51 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/testing/testing.rkt     | Racket   |         53 |          7 |         14 |         74 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/tokens.rkt              | Racket   |         20 |          6 |         12 |         38 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/Main.jack                    | Jack     |         18 |          6 |          5 |         29 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/Main.xml                     | XML      |        114 |          0 |          0 |        114 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/MainIT.xml                   | XML      |          1 |          0 |          0 |          1 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/MainIX.xml                   | XML      |          1 |          0 |          0 |          1 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/MainT.xml                    | XML      |         64 |          0 |          1 |         65 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/Square.jack                  | Jack     |         82 |          5 |         14 |        101 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/Square.jackT.xml             | XML      |        449 |          0 |          0 |        449 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/Square.xml                   | XML      |        967 |          0 |          1 |        968 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareGame.jack              | Jack     |         45 |          5 |         11 |         61 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareGame.xml               | XML      |        544 |          0 |          1 |        545 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareGameIT.xml             | XML      |          1 |          0 |          0 |          1 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareGameIX.xml             | XML      |          0 |          0 |          1 |          1 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareGameT.xml              | XML      |        268 |          0 |          1 |        269 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareIT.xml                 | XML      |        464 |          0 |          0 |        464 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareIX.xml                 | XML      |        744 |          0 |          0 |        744 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareT.xml                  | XML      |        449 |          0 |          1 |        450 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/test.xml                     | XML      |         20 |          0 |          0 |         20 |
+| /Users/idang/dev2/Nand2Tetris-Racket/README.md                        | Markdown |          4 |          0 |          3 |          7 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Virtual_Machine/commands.rkt     | Racket   |        102 |         15 |         23 |        140 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Virtual_Machine/main.rkt         | Racket   |         45 |          0 |          7 |         52 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Virtual_Machine/md/HackASM.md    | Markdown |         58 |          0 |         12 |         70 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Virtual_Machine/md/VM.md         | Markdown |        106 |          0 |         14 |        120 |
+| Total                                                                 |          |      5,264 |        143 |        222 |      5,629 |
++-----------------------------------------------------------------------+----------+------------+------------+------------+------------+

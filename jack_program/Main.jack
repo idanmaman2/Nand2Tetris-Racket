@@ -1,0 +1,12 @@
+class Main {
+    function void main() {
+        var int x ;
+        var SquareGame game;
+        let x = 3 ; 
+        let x = x * x ; 
+        let game = SquareGame.new();
+        do game.run();
+        do game.dispose();
+        return;
+    }
+}

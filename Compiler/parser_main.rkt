@@ -81,7 +81,7 @@
         (list-ref better-tokens current-token))]
         
         [fileName (string-append (string-trim name "IT.xml" #:left? #f #:right? #t #:repeat? #f)
-                                  "IX.xml")]
+                                  ".vm")]
         [output-file (open-output-file (string-append argFolder "/" fileName)
                                        #:exists 'replace
                                        #:replace-permissions? #t)]
@@ -90,8 +90,14 @@
     )
     ;(dumpToScreen name better-tokens)
     ;(display parser-output)
-    (write-xexpr parser-output output-file)
-
+    (display parser-output output-file) 
+    (writeln "")
+    (writeln "--------------------------------")
+    (writeln "--------------------------------")
+    (writeln "--------------------------------")
+    (writeln "--------------------------------")
+    (writeln "--------------------------------")
+    (writeln fileName )
 
 
      )

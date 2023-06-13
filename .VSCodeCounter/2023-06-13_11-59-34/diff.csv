@@ -1,0 +1,10 @@
+"filename", "language", "Racket", "XML", "Jack", "comment", "blank", "total"
+"/Users/idang/dev2/Nand2Tetris-Racket/Compiler/code_writer.rkt", "Racket", 24, 0, 0, 2, 8, 34
+"/Users/idang/dev2/Nand2Tetris-Racket/Compiler/semantic_parser.rkt", "Racket", 109, 0, 0, 3, 7, 119
+"/Users/idang/dev2/Nand2Tetris-Racket/Compiler/symbol_table.rkt", "Racket", 26, 0, 0, 1, 3, 30
+"/Users/idang/dev2/Nand2Tetris-Racket/IDK/Main.jack", "Jack", 0, 0, 4, 0, 0, 4
+"/Users/idang/dev2/Nand2Tetris-Racket/IDK/MainIX.xml", "XML", 0, -1, 0, 0, 1, 0
+"/Users/idang/dev2/Nand2Tetris-Racket/IDK/Square.jack", "Jack", 0, 0, 3, 0, 0, 3
+"/Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareIT.xml", "XML", 0, -463, 0, 0, 0, -463
+"/Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareIX.xml", "XML", 0, -744, 0, 0, 1, -743
+"Total", "-", 159, -1208, 7, 6, 20, -1016

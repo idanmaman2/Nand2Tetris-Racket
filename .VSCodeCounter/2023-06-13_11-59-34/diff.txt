@@ -1,0 +1,36 @@
+Date : 2023-06-13 11:59:34
+Directory : /Users/idang/dev2/Nand2Tetris-Racket
+Total : 8 files,  -1042 codes, 6 comments, 20 blanks, all -1016 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Racket   |          3 |        159 |          6 |         18 |        183 |
+| Jack     |          2 |          7 |          0 |          0 |          7 |
+| XML      |          3 |     -1,208 |          0 |          2 |     -1,206 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                              | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                 |          8 |     -1,042 |          6 |         20 |     -1,016 |
+| Compiler                                                          |          3 |        159 |          6 |         18 |        183 |
+| IDK                                                               |          5 |     -1,201 |          0 |          2 |     -1,199 |
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                          | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/code_writer.rkt     | Racket   |         24 |          2 |          8 |         34 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/semantic_parser.rkt | Racket   |        109 |          3 |          7 |        119 |
+| /Users/idang/dev2/Nand2Tetris-Racket/Compiler/symbol_table.rkt    | Racket   |         26 |          1 |          3 |         30 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/Main.jack                | Jack     |          4 |          0 |          0 |          4 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/MainIX.xml               | XML      |         -1 |          0 |          1 |          0 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/Square.jack              | Jack     |          3 |          0 |          0 |          3 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareIT.xml             | XML      |       -463 |          0 |          0 |       -463 |
+| /Users/idang/dev2/Nand2Tetris-Racket/IDK/SquareIX.xml             | XML      |       -744 |          0 |          1 |       -743 |
+| Total                                                             |          |     -1,042 |          6 |         20 |     -1,016 |
++-------------------------------------------------------------------+----------+------------+------------+------------+------------+

@@ -106,7 +106,7 @@
                                         (format hack-push-str "@ARG\nD=M")
                                         (format hack-push-str "@THIS\nD=M")
                                         (format hack-push-str "@THAT\nD=M")
-                                        (number->string (- (string->number nArgs) 5 ))
+                                        (number->string (+ (string->number nArgs) 5 )) ;mistake should be + (check it)!!!
                                         (hack-goto (format "FUNCTION_~a" funcName ))
                                         (hack-label (format "RETURN_~a" funcName ))))
 
@@ -121,11 +121,7 @@
 ;"return from function"
 
 
-(define hack-return-str
-
-(string-join (list "@LCL" "D=M" "@5" "A=D-A" "D=M" "@13" "M=D" "~a" "@ARG" "D=M" "@SP" "M=D+1" "~a" "~a" "~a" "~a" "@13" "A=M" "0;JMP" ) "\n") 
-
-)
+(define hack-return-str (string-join (list "@LCL" "D=M" "@5" "A=D-A" "D=M" "@13" "M=D" "~a" "@ARG" "D=M" "@SP" "M=D+1" "~a" "~a" "~a" "~a" "@13" "A=M" "0;JMP" ) "\n") )
 
 (define (hack-return) 
 
