@@ -9,8 +9,8 @@
 (require "code_writer.rkt")
 
 ;exports
-(provide type2TokensConvertor)
-(provide XMLjackParser)
+(provide token-convert)
+(provide VMjackParser)
 
 ;Idan's Nand2Tetris Compiler under the MIT License
 
@@ -69,9 +69,8 @@
       [(equal? name 'SYMBOL) ((hash-ref convertTableSymbol val) val)]
       [else classicToken])))
 
-(define (type2TokensConvertor tokenList) (map token-convert tokenList))
 
-(define XMLjackParser
+(define VMjackParser
   (parser
    (tokens keywords-tokens stopTokens keywords-tokensC symbol-tokensC INT-tokens STR-tokens ID-tokens)
    (start <class>)
@@ -83,15 +82,15 @@
     ; ----------------------------------------------------------------
     ;class -> 'class' className '{' classVarDec* subroutineDec* '}'
     [<class>
-     [(<CLASS-XML> <classNameDec> <JSYM-LCURLY-XML> <ITERclassVarDec> <ITERsubRoutineDec> <JSYM-RCURLY-XML>)
+     [(<CLASS-VM> <classNameDec> <JSYM-LCURLY-VM> <ITERclassVarDec> <ITERsubRoutineDec> <JSYM-RCURLY-VM>)
       (begin (clear-all-class-scope) (string-join $5 "\n") )]]
     ;classNameDec -> ID
     [<classNameDec> [(<ID-VM>) (begin (create-class-scope $1) $1)]]
     ;classVarDec -> ('static' | 'field' ) type VarName (',' varName)* ';'
     [<classVarDec>
-     [(<STATIC-XML> <type> <varName> <ITERVarName> <JSYM-DOTCOM-XML>)
+     [(<STATIC-VM> <type> <varName> <ITERVarName> <JSYM-DOTCOM-VM>)
       (begin (insert-static $3 $2) (for ([i $4])(insert-static i $2))(void))]
-     [(<FIELD-XML> <type> <varName> <ITERVarName> <JSYM-DOTCOM-XML>)
+     [(<FIELD-VM> <type> <varName> <ITERVarName> <JSYM-DOTCOM-VM>)
       (begin (insert-field $3 $2) (for ([i $4]) (insert-field i $2)) (void))]]
 
     ;type -> 'int' | 'char' | 'boolean' | className
@@ -99,7 +98,7 @@
     ;subRoutineDec -> ('construcntor' | 'function' | 'method' ) ('void' | type ) subroutineName '(' paramterList ') subroutineBody
     [<subRoutineDec>
 
-     [(<CONSTRUCTOR-VM> <type> <subroutineName> <JSYM-LROUND-XML> <parameterList> <JSYM-RROUND-XML> <subroutineBody>)
+     [(<CONSTRUCTOR-VM> <type> <subroutineName> <JSYM-LROUND-VM> <parameterList> <JSYM-RROUND-VM> <subroutineBody>)
       (begin
         ;(dumpSymbolTables)
         (let 
@@ -108,7 +107,7 @@
         )
         )]
 
-     [(<FUNCTION-VM> <type> <subroutineName> <JSYM-LROUND-XML> <parameterList> <JSYM-RROUND-XML> <subroutineBody>)
+     [(<FUNCTION-VM> <type> <subroutineName> <JSYM-LROUND-VM> <parameterList> <JSYM-RROUND-VM> <subroutineBody>)
       (begin
         ;(dumpSymbolTables)
         (let 
@@ -117,7 +116,7 @@
         )
        )]
 
-     [(<METHOD-VM> <type> <subroutineName> <JSYM-LROUND-XML> <parameterList> <JSYM-RROUND-XML> <subroutineBody>)
+     [(<METHOD-VM> <type> <subroutineName> <JSYM-LROUND-VM> <parameterList> <JSYM-RROUND-VM> <subroutineBody>)
       (begin
         ;(dumpSymbolTables)
         (let 
@@ -126,7 +125,7 @@
         )
         )]
 
-     [(<CONSTRUCTOR-VM> <VOID-XML> <subroutineName> <JSYM-LROUND-XML> <parameterList> <JSYM-RROUND-XML> <subroutineBody>)
+     [(<CONSTRUCTOR-VM> <VOID-VM> <subroutineName> <JSYM-LROUND-VM> <parameterList> <JSYM-RROUND-VM> <subroutineBody>)
       (begin
         ;(dumpSymbolTables)
         (let 
@@ -135,7 +134,7 @@
         )
         )]
 
-     [(<FUNCTION-VM> <VOID-XML> <subroutineName> <JSYM-LROUND-XML> <parameterList> <JSYM-RROUND-XML> <subroutineBody>)
+     [(<FUNCTION-VM> <VOID-VM> <subroutineName> <JSYM-LROUND-VM> <parameterList> <JSYM-RROUND-VM> <subroutineBody>)
       (begin
         ;(dumpSymbolTables)
         (let 
@@ -144,7 +143,7 @@
         )
         )]
 
-     [(<METHOD-VM> <VOID-XML> <subroutineName> <JSYM-LROUND-XML> <parameterList> <JSYM-RROUND-XML> <subroutineBody>)
+     [(<METHOD-VM> <VOID-VM> <subroutineName> <JSYM-LROUND-VM> <parameterList> <JSYM-RROUND-VM> <subroutineBody>)
       (begin
         ;(dumpSymbolTables)
         (let 
@@ -160,10 +159,10 @@
      [(<type> <varName> <ITERParamterList>)
       (begin (insert-parameter $2 $1) (for ([i $3]) (insert-parameter (list-ref i 1) (list-ref i 0))) (+ 1 (length $3)))]]
     ;subroutineBody -> '{' varDec* statements '}'
-    [<subroutineBody> [(<JSYM-LCURLY-XML> <ITERVarDec> <statements> <JSYM-RCURLY-XML>) $3]]
+    [<subroutineBody> [(<JSYM-LCURLY-VM> <ITERVarDec> <statements> <JSYM-RCURLY-VM>) $3]]
     ;varDec -> 'var' type VarName (',' varName)* ';'
     [<varDec>
-     [(<VAR-XML> <type> <varName> <ITERVarName> <JSYM-DOTCOM-XML>)
+     [(<VAR-VM> <type> <varName> <ITERVarName> <JSYM-DOTCOM-VM>)
       (begin (insert-local-var $3 $2) (for ([i $4]) (insert-local-var i $2)) (void))]]
     ;className -> id
     [<className> [(<ID-VM>) $1]]
@@ -179,30 +178,30 @@
     [<statement> [(<letStatement>) $1] [(<ifStatement>) $1] [(<whileStatement>) $1] [(<doStatement>) $1] [(<returnStatement>) $1]]
     ;letStatement -> 'let' varName ('[' expression ']')? '=' expresion ';'
     [<letStatement>
-     [(<LET-XML> <varName> <JSYM-LREC-XML> <expression> <JSYM-RREC-XML> <JSYM-EQULAS-XML> <expression> <JSYM-DOTCOM-XML>)
+     [(<LET-VM> <varName> <JSYM-LREC-VM> <expression> <JSYM-RREC-VM> <JSYM-EQULAS-VM> <expression> <JSYM-DOTCOM-VM>)
       (begin (compile-let-statement (searchVariable $2) $7 'vararray $4))]
-     [(<LET-XML> <varName> <JSYM-EQULAS-XML> <expression> <JSYM-DOTCOM-XML>)
+     [(<LET-VM> <varName> <JSYM-EQULAS-VM> <expression> <JSYM-DOTCOM-VM>)
       (begin (compile-let-statement (searchVariable $2) $4 'var))]]
     ;ifStatement -> 'if' '(' expression ')' '{' statements '}' ('else' '{' statements '}' ) ?
     [<ifStatement>
-     [(<IF-XML> <JSYM-LROUND-XML> <expression> <JSYM-RROUND-XML> <JSYM-LCURLY-XML> <statements> <JSYM-RCURLY-XML>)
+     [(<IF-VM> <JSYM-LROUND-VM> <expression> <JSYM-RROUND-VM> <JSYM-LCURLY-VM> <statements> <JSYM-RCURLY-VM>)
       (begin (compile-if-statement $3 $6))]
-     [(<IF-XML> <JSYM-LROUND-XML> <expression> <JSYM-RROUND-XML> <JSYM-LCURLY-XML> <statements> <JSYM-RCURLY-XML> <ELSE-XML> <JSYM-LCURLY-XML> <statements> <JSYM-RCURLY-XML>)
+     [(<IF-VM> <JSYM-LROUND-VM> <expression> <JSYM-RROUND-VM> <JSYM-LCURLY-VM> <statements> <JSYM-RCURLY-VM> <ELSE-VM> <JSYM-LCURLY-VM> <statements> <JSYM-RCURLY-VM>)
       (begin (compile-if-statement $3 $6 $10))]]
     ;whileStatement -> 'while' '(' expression ')' '{' statements '}'
     [<whileStatement>
-     [(<WHILE-XML> <JSYM-LROUND-XML> <expression> <JSYM-RROUND-XML> <JSYM-LCURLY-XML> <statements> <JSYM-RCURLY-XML>)
+     [(<WHILE-VM> <JSYM-LROUND-VM> <expression> <JSYM-RROUND-VM> <JSYM-LCURLY-VM> <statements> <JSYM-RCURLY-VM>)
       (begin (compile-while-statement $3 $6))]]
     ;doStatement -> 'do' subroutineCall ';'
     [<doStatement>
-     [(<DO-XML> <subroutineCall> <JSYM-DOTCOM-XML>)
+     [(<DO-VM> <subroutineCall> <JSYM-DOTCOM-VM>)
       (begin (compile-do-statement $2))]]
     ;ReturnStatement -> 'return' expression? ';'
     [<returnStatement>
-     [(<RETURN-XML> <expression> <JSYM-DOTCOM-XML>)
+     [(<RETURN-VM> <expression> <JSYM-DOTCOM-VM>)
       (begin (string-append $2 "\n" (compile-return-statement #t)))]
 
-     [(<RETURN-XML> <JSYM-DOTCOM-XML>)
+     [(<RETURN-VM> <JSYM-DOTCOM-VM>)
       (begin (compile-return-statement))]]
     ; ----------------------------------------------------------------
     ;expression -> term (op term)*
@@ -213,21 +212,21 @@
     ;         subroutineCall | '(' expression ')' | unaryOp term
     [<term>
      [(<INTEGER-VM>) $1]
-     [(<STRING-XML>) $1]
+     [(<STRING-VM>) $1]
      [(<KeyWordConstant>) $1]
      [(<varName>)
       (begin (compile-term (searchVariable $1) 'var))]
-     [(<varName> <JSYM-LREC-XML> <expression> <JSYM-RREC-XML>)
+     [(<varName> <JSYM-LREC-VM> <expression> <JSYM-RREC-VM>)
       (begin (compile-term (searchVariable $1) 'arrayvar $3))]
      [(<subroutineCall>)  $1]
-     [(<JSYM-LROUND-XML> <expression> <JSYM-RROUND-XML>)  $2]
+     [(<JSYM-LROUND-VM> <expression> <JSYM-RROUND-VM>)  $2]
      [(<unaryOp> <term>) (begin (string-append $2 "\n" $1))]]
     ;subroutineCall -> subroutineName '(' expressionList ')' | (className | varName)'.'subroutineName '(' expressionList ')'
     [<subroutineCall>
-     [(<subroutineName> <JSYM-LROUND-XML> <expressionList> <JSYM-RROUND-XML>) 
+     [(<subroutineName> <JSYM-LROUND-VM> <expressionList> <JSYM-RROUND-VM>) 
      (begin (compile-subroutine-call (get-class-scope) $1 (list-ref $3 1) (string-join (list-ref $3 0) "\n")))]
 
-     [(<className> <JSYM-DOT-XML> <subroutineName> <JSYM-LROUND-XML> <expressionList> <JSYM-RROUND-XML>)
+     [(<className> <JSYM-DOT-VM> <subroutineName> <JSYM-LROUND-VM> <expressionList> <JSYM-RROUND-VM>)
       (begin
         (cond 
           [(inSymbolTable? $1) (compile-subroutine-var-class-call (searchVariable $1) $3 (list-ref $5 1) (string-join (list-ref $5 0) "\n"))]
@@ -236,7 +235,7 @@
       )
     ]
 
-     ;[(<varName> <JSYM-DOT-XML> <subroutineName> <JSYM-LROUND-XML> <expressionList> <JSYM-RROUND-XML>)
+     ;[(<varName> <JSYM-DOT-VM> <subroutineName> <JSYM-LROUND-VM> <expressionList> <JSYM-RROUND-VM>)
       ;(begin (compile-subroutine-var-class-call (searchVariable $1) $3 (list-ref $5 1) (string-join (list-ref $5 0) "\n")))]
     ]
     ;expressionList -> (expression (',' expression)* )?
@@ -267,11 +266,11 @@
     ;subroutineDec*
     [<ITERsubRoutineDec> [() '()] [(<subRoutineDec> <ITERsubRoutineDec>) (append (list $1) $2)]]
     ;(',' varName)*
-    [<ITERVarName> [() '()] [(<JSYM-COMMA-XML> <varName> <ITERVarName>) (append (list $2) $3)]]
+    [<ITERVarName> [() '()] [(<JSYM-COMMA-VM> <varName> <ITERVarName>) (append (list $2) $3)]]
     ;(','  type VarName)*
     [<ITERParamterList>
      [() '()]
-     [(<JSYM-COMMA-XML> <type> <varName> <ITERParamterList>) (append (list (list $2 $3)) $4)]]
+     [(<JSYM-COMMA-VM> <type> <varName> <ITERParamterList>) (append (list (list $2 $3)) $4)]]
     ;VarDec*
     [<ITERVarDec> [() (void)] [(<varDec> <ITERVarDec>) (void)]]
     ;(op term)*
@@ -283,7 +282,7 @@
     ;(',' expression)*
     [<ITERExpressionList>
      [() '()]
-     [(<JSYM-COMMA-XML> <expression> <ITERExpressionList>)
+     [(<JSYM-COMMA-VM> <expression> <ITERExpressionList>)
       (begin
         (append (list $2) $3))]]
     ;statement*
@@ -292,51 +291,28 @@
      [(<statement> <ITERStatement>)
       (begin
         (append (list $1) $2))]]
-    ; :::  XML PARSING PART :::
-    ; each rule that contains a leaf will be translated to XML cause I am too lazy to create a new  function ...
-    [<JSYM-LROUND-XML> [(JSYM-LROUND) (list 'symbol $1)]]
-    [<JSYM-RROUND-XML> [(JSYM-RROUND) (list 'symbol $1)]]
-    [<JSYM-LCURLY-XML> [(JSYM-LCURLY) (list 'symbol $1)]]
-    [<JSYM-RCURLY-XML> [(JSYM-RCURLY) (list 'symbol $1)]]
-    [<JSYM-LREC-XML> [(JSYM-LREC) (list 'symbol $1)]]
-    [<JSYM-RREC-XML> [(JSYM-RREC) (list 'symbol $1)]]
-    [<JSYM-DOT-XML> [(JSYM-DOT) (list 'symbol $1)]]
-    [<JSYM-COMMA-XML> [(JSYM-COMMA) (list 'symbol $1)]]
-    [<JSYM-DOTCOM-XML> [(JSYM-DOTCOM) (list 'symbol $1)]]
-    [<JSYM-PLUS-XML> [(JSYM-PLUS) (list 'symbol $1)]]
-    [<JSYM-MINUS-XML> [(JSYM-MINUS) (list 'symbol $1)]]
-    [<JSYM-STAR-XML> [(JSYM-STAR) (list 'symbol $1)]]
-    [<JSYM-SLASH-XML> [(JSYM-SLASH) (list 'symbol $1)]]
-    [<JSYM-ANDC-XML> [(JSYM-ANDC) (list 'symbol $1)]]
-    [<JSYM-ORC-XML> [(JSYM-ORC) (list 'symbol $1)]]
-    [<JSYM-SMALLER-XML> [(JSYM-SMALLER) (list 'symbol $1)]]
-    [<JSYM-BIGER-XML> [(JSYM-BIGER) (list 'symbol $1)]]
-    [<JSYM-EQULAS-XML> [(JSYM-EQULAS) (list 'symbol $1)]]
-    [<JSYM-NOTC-XML> [(JSYM-NOTC) (list 'symbol $1)]]
-    [<CLASS-XML> [(CLASS) (list 'keyword $1)]]
-    [<CONSTRUCTOR-XML> [(CONSTRUCTOR) (list 'keyword $1)]]
-    [<FUNCTION-XML> [(FUNCTION) (list 'keyword $1)]]
-    [<METHOD-XML> [(METHOD) (list 'keyword $1)]]
-    [<FIELD-XML> [(FIELD) (list 'keyword $1)]]
-    [<STATIC-XML> [(STATIC) (list 'keyword $1)]]
-    [<VAR-XML> [(VAR) (list 'keyword $1)]]
-    [<INT-XML> [(INT) (list 'keyword $1)]]
-    [<CHAR-XML> [(CHAR) (list 'keyword $1)]]
-    [<BOOLEAN-XML> [(BOOLEAN) (list 'keyword $1)]]
-    [<VOID-XML> [(VOID) (list 'keyword $1)]]
-    [<TRUE-XML> [(TRUE) (list 'keyword $1)]]
-    [<FALSE-XML> [(FALSE) (list 'keyword $1)]]
-    [<NULL-XML> [(NULL) (list 'keyword $1)]]
-    [<THIS-XML> [(THIS) (list 'keyword $1)]]
-    [<LET-XML> [(LET) (list 'keyword $1)]]
-    [<DO-XML> [(DO) (list 'keyword $1)]]
-    [<IF-XML> [(IF) (list 'keyword $1)]]
-    [<ELSE-XML> [(ELSE) (list 'keyword $1)]]
-    [<WHILE-XML> [(WHILE) (list 'keyword $1)]]
-    [<RETURN-XML> [(RETURN) (list 'keyword $1)]]
-    [<INTEGER-XML> [(INTEGER) (list 'integerConstant $1)]]
-    [<STRING-XML> [(STRING) (list 'stringConstant $1)]]
-    [<ID-XML> [(ID) (list 'identifier $1)]]
+    ; :::  VM PARSING PART :::
+    ; each rule that contains a leaf will be translated to VM cause I am too lazy to create a new  function ...
+    [<JSYM-LROUND-VM> [(JSYM-LROUND) (void)]]
+    [<JSYM-RROUND-VM> [(JSYM-RROUND) (void)]]
+    [<JSYM-LCURLY-VM> [(JSYM-LCURLY) (void)]]
+    [<JSYM-RCURLY-VM> [(JSYM-RCURLY) (void)]]
+    [<JSYM-LREC-VM> [(JSYM-LREC) (void)]]
+    [<JSYM-RREC-VM> [(JSYM-RREC) (void)]]
+    [<JSYM-DOT-VM> [(JSYM-DOT) (void)]]
+    [<JSYM-COMMA-VM> [(JSYM-COMMA) (void)]]
+    [<JSYM-DOTCOM-VM> [(JSYM-DOTCOM) (void)]]
+    [<CLASS-VM> [(CLASS) (void)]]
+    [<FIELD-VM> [(FIELD) (void)]]
+    [<STATIC-VM> [(STATIC) (void)]]
+    [<VAR-VM> [(VAR) (void)]]
+    [<VOID-VM> [(VOID) (void)]]
+    [<LET-VM> [(LET) (void)]]
+    [<DO-VM> [(DO) (void)]]
+    [<IF-VM> [(IF) (void)]]
+    [<ELSE-VM> [(ELSE) (void)]]
+    [<WHILE-VM> [(WHILE) (void)]]
+    [<RETURN-VM> [(RETURN) (void) ]]
     ; --------- <><><><> ---------
     [<ID-VM> [(ID) $1]]
     [<INT-VM> [(INT) "int"]]

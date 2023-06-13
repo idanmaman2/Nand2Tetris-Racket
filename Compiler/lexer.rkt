@@ -37,7 +37,7 @@
          ;([0-9]|[1-9][0-9]{1,3}|[12][0-9]{4}|3[01][0-9]{3}|32[0-6][0-9]{2}|327[0-5][0-9]|3276[0-7])
          [(or (:(char-range #\0 #\9))
               (: (char-range #\1 #\9) (repetition 1 3 (char-range #\0 #\9)))
-              (: "12" (repetition 4 4 (char-range #\0 #\9)))
+              (: (char-range #\1 #\2) (repetition 4 4 (char-range #\0 #\9)))
               (: "3" (char-range #\0 #\1) (repetition 3 3 (char-range #\0 #\9)))
               (: "32" (char-range #\0 #\6) (repetition 2 2 (char-range #\0 #\9)))
               (: "327" (char-range #\0 #\5) (char-range #\0 #\9))
@@ -57,14 +57,14 @@
          ; comment type 1 //
          [(: "//" (repetition 0 +inf.0 (~ #\newline)) #\newline) (void)]
          ;comment type 2 \**\
-         [(: "/*" (repetition 0 +inf.0 (complement (intersection "*" "/" ))) "*/") (void)]
+         [(: "/*" (repetition 0 +inf.0 (~ "/" )) "*/") (void)]
          ;igoring all those chars 
          [#\space (void)]
          [#\newline (void)]
          [whitespace (void)]
          [blank (void)]
          ;stop lexing 
-         [(eof) eof]))
+         [(eof) (token-EOF lexeme)]))
 (define (fileAnlyze ftest)
 
   (define res '())

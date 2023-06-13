@@ -57,10 +57,11 @@
         (map (lambda (z) (string-append
                                 (compile-integer (char->integer z))
                                 "\n"
-                                "call String.appendChar 2 "
+                                "call String.appendChar 2"
                         )) (string->list valuestr))
 
     )
+    "\n"
     ) 
 )
 
@@ -111,13 +112,13 @@
                                 (varInfo-index var)
             )
         ]
-        [(equal? type 'vararray (format 
+        [(equal? type 'vararray) (format 
                                 qstrvararray
                                 (symbol->string (kind-to-segment (varInfo-kind var)) )
                                  (varInfo-index var)
                                 arrexpr
                                 expr
-                            ))]
+                            )]
         [else (error 'search_symbol_table "failed because ~a" "let syntax is sucks!!!")]
     
     )
