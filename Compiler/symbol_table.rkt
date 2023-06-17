@@ -66,15 +66,19 @@
 (define (get-count-local) localVarCounter ) 
 (define (update-count-local) (set! localVarCounter (add1 localVarCounter)))
 (define (clear-count-local) (set! localVarCounter 0 ))
+
 (define (get-count-argument) argumentVarCounter ) 
 (define (update-count-argument) (set! argumentVarCounter (add1 argumentVarCounter)))
 (define (clear-count-argument) (set! argumentVarCounter 0 ))
+
 (define (get-count-field) fieldVarCounter ) 
 (define (update-count-field) (set! fieldVarCounter (add1 fieldVarCounter)))
 (define (clear-count-field) (set! fieldVarCounter 0 ))
+
 (define (get-count-static) staticVarCounter ) 
 (define (update-count-static) (set! staticVarCounter (add1 staticVarCounter)))
 (define (clear-count-static) (set! staticVarCounter 0 ))
+
 (define (insert-local-var name type )  (insert-subroutineLevelSymbolTable (varInfo name type 'local (get-count-local)  'subroutine)) (update-count-local))
 (define (insert-parameter name type)  (insert-subroutineLevelSymbolTable (varInfo name type 'argument (get-count-argument)  'subroutine)) (update-count-argument) )
 (define (create-class-scope name) (set! class-Scope name))

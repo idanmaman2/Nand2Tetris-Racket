@@ -27,7 +27,7 @@
                                     ([tokenN (Nand2TetrisLexer input-file)])
                                     (cond 
                                         [(void? tokenN) (get_non_val_token)]
-                                        [else (token-convert tokenN)]
+                                        [else tokenN]
                                     )
        ))]
        [input-file (open-input-file (string-append argFolder "/" name))]

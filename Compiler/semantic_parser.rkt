@@ -9,70 +9,15 @@
 (require "code_writer.rkt")
 
 ;exports
-(provide token-convert)
 (provide VMjackParser)
 
 ;Idan's Nand2Tetris Compiler under the MIT License
 
 ; because the cfg-parser can take variety of symbols on the same token name - I created conversion from the classic token to one that the CFG understand ( I not so nice But i am not a slave and i am not going to change all the code)
 
-(define-tokens keywords-tokensC (CLASS CONSTRUCTOR FUNCTION METHOD FIELD STATIC INT VAR CHAR BOOLEAN VOID TRUE FALSE NULL THIS LET DO IF ELSE WHILE RETURN))
-(define-tokens symbol-tokensC (JSYM-RROUND JSYM-LROUND JSYM-LCURLY JSYM-RCURLY JSYM-LREC JSYM-RREC JSYM-DOT JSYM-COMMA JSYM-DOTCOM JSYM-PLUS JSYM-MINUS JSYM-STAR JSYM-SLASH JSYM-ANDC JSYM-ORC JSYM-BIGER JSYM-SMALLER JSYM-EQULAS JSYM-NOTC))
-(define (token-convert classicToken)
-  (define convertTableKEYWORD
-    (hash "class" token-CLASS
-          "constructor" token-CONSTRUCTOR
-          "function" token-FUNCTION
-          "method" token-METHOD
-          "field" token-FIELD
-          "static" token-STATIC
-          "var" token-VAR
-          "int" token-INT
-          "char" token-CHAR
-          "boolean" token-BOOLEAN
-          "void" token-VOID
-          "true" token-TRUE
-          "false" token-FALSE
-          "null" token-NULL
-          "this" token-THIS
-          "let" token-LET
-          "do" token-DO
-          "if" token-IF
-          "else" token-ELSE
-          "while" token-WHILE
-          "return" token-RETURN))
-
-  (define convertTableSymbol
-    (hash "(" token-JSYM-LROUND
-          ")" token-JSYM-RROUND
-          "{" token-JSYM-LCURLY
-          "}" token-JSYM-RCURLY
-          "[" token-JSYM-LREC
-          "]" token-JSYM-RREC
-          "." token-JSYM-DOT
-          "," token-JSYM-COMMA
-          ";" token-JSYM-DOTCOM
-          "+" token-JSYM-PLUS
-          "-" token-JSYM-MINUS
-          "*" token-JSYM-STAR
-          "/" token-JSYM-SLASH
-          "&" token-JSYM-ANDC
-          "|" token-JSYM-ORC
-          "<" token-JSYM-SMALLER
-          ">" token-JSYM-BIGER
-          "=" token-JSYM-EQULAS
-          "~" token-JSYM-NOTC))
-
-  (let ([name (token-name classicToken)] [val (token-value classicToken)])
-    (cond
-      [(equal? name 'KEYWORD) ((hash-ref convertTableKEYWORD val) val)]
-      [(equal? name 'SYMBOL) ((hash-ref convertTableSymbol val) val)]
-      [else classicToken])))
-
-
 (define VMjackParser
   (parser
-   (tokens keywords-tokens stopTokens keywords-tokensC symbol-tokensC INT-tokens STR-tokens ID-tokens)
+   (tokens  stopTokens keywords-tokensC symbol-tokensC INT-tokens STR-tokens ID-tokens)
    (start <class>)
    (end EOF)
    (error (lambda (a b stx)
