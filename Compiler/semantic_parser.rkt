@@ -271,7 +271,6 @@
     [<THIS-VM> [(THIS) (begin (compile-this))]]
     ; unary operations :
     [<JSYM-NOTC-VM> [(JSYM-NOTC) "not"]]
-    ;[<JSYM-MINUS-VM> [(JSYM-MINUS)      (void)]]; defined in upper levels
     ;binary operations :
     [<JSYM-PLUS-VM> [(JSYM-PLUS) "add"]]
     [<JSYM-MINUS-VM> [(JSYM-MINUS) (void)]] ; defined in upper levels

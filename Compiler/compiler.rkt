@@ -2,7 +2,6 @@
  (require racket/string)
  (require racket/list)
  (require parser-tools/lex)
- (require "tokens.rkt")
  (require "semantic_parser.rkt")
  (require "lexer.rkt")
  ;Idan's Nand2Tetris Compiler under the MIT License

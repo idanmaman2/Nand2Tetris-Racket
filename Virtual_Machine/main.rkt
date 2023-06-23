@@ -35,7 +35,7 @@
         [(eof-object? line)  (void) ] 
         [(regexp-match? #rx"^((//| ).*)?$" (string-trim line)) (looped fileo)] 
         [else 
-        (display (analyze (string-trim line)) outputFile)  
+        (display (analyze (string-trim (regexp-replace #rx"//.*" line "" ) )) outputFile)  
         (display "\n" outputFile )  
           (looped fileo)
         
@@ -44,8 +44,9 @@
   (looped inputFile))
 
 (define inputFileName (vector*-ref (current-command-line-arguments) 0))
-(define namespace (car (string-split inputFileName ".")) )
-(define outputFileName (string-append namespace ".asm"))
+(define namespaceFolder (car (string-split inputFileName ".")) )
+(define namespace (last (string-split namespaceFolder "/") ))
+(define outputFileName (string-append namespaceFolder ".asm"))
 (define outputFile (open-output-file outputFileName #:exists 'replace #:replace-permissions? #t))
 
 (hack-set-namepsace namespace)
