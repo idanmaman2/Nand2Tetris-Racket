@@ -21,6 +21,7 @@
 (provide hack-function)
 (provide hack-call)
 (provide hack-return)
+(provide hack-bootstrap)
 (provide hack-set-namepsace)
 
 
@@ -147,4 +148,5 @@
 ))
 
 ; BootStrap : init the first function to run ... 
-(define hack-bootstrap (string-join (list  "@256" "D=A" "@SP" "M=256"  (hack-call "Sys.init" "0") "\n" ) ) ) 
+(define hack-bootstrap-str (string-join (list "@256" "D=A" "@SP" "M=D" FILL_COMMAND_FORNAT) "\n"))
+(define hack-bootstrap (format hack-bootstrap-str  (hack-call "Sys.init" "0")) ) 
